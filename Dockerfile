@@ -1,29 +1,7 @@
-FROM ubuntu:latest
+FROM scrcpy-docker:latest
 
-RUN apt-get update
-
-RUN apt-get install -y ffmpeg libsdl2-2.0-0 wget \
-    gcc git pkg-config meson ninja-build libsdl2-dev \
-    libavcodec-dev libavdevice-dev libavformat-dev libavutil-dev \
-    libswresample-dev libusb-1.0-0 libusb-1.0-0-dev \
-    sudo unzip alsa-utils
-
-# aptでadbをインストールするとapt pairコマンドがないため、直接adb最新版をインストール
-RUN wget https://dl.google.com/android/repository/platform-tools-latest-linux.zip  && \
-    unzip platform-tools-latest-linux.zip && \
-    ln -s $(pwd)/platform-tools/adb /usr/local/bin/adb
-
-RUN git clone https://github.com/Genymobile/scrcpy.git && \
-    cd scrcpy && \
-    ./install_release.sh
-
-RUN apt-get install -y npm && \
-    npm install n -g && \
-    n stable && \
-    apt-get purge -y nodejs npm && \
-    apt-get autoremove -y
-
-RUN npm i adb-wifi -g 
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # 作業ユーザー作成
 ARG UID=1000
@@ -40,9 +18,6 @@ EOF
 
 USER $USER
 
-#ENV ADB_VENDOR_KEYS=/cache/adbkey
+ENV PORT_CACHE_FILE=/home/$USER/cache/port
 
-COPY entrypoint.sh ./entrypoint.sh
-RUN sudo chmod +x ./entrypoint.sh
-
-ENTRYPOINT [ "./entrypoint.sh" ]
+ENTRYPOINT [ "/entrypoint.sh" ]

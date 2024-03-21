@@ -1,8 +1,12 @@
 version: '3.9'
 
 services:
-  mirror:
+  build:
     image: scrcpy-docker:latest
+    build:
+      context: ./build
+
+  mirror:
     build:
       context: .
       args:
@@ -12,8 +16,9 @@ services:
       - DISPLAY=$DISPLAY
       - PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native
       - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}
+      - ADDRESS=192.168.11.62
+      - SCRCPY_ARGS=--max-size=480 --max-fps=1 --video-bit-rate=512K --audio-bit-rate=8K --audio-buffer=500 --window-height=720
     volumes:
-      - /dev/bus/usb:/dev/bus/usb
       - /tmp/.X11-unix:/tmp/.X11-unix
       - /dev/snd:/dev/snd
       - ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native
