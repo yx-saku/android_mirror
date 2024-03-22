@@ -1,7 +1,11 @@
-FROM scrcpy-docker:latest
+FROM ubuntu:latest
+
+RUN apt-get update
+
+COPY setup.sh ./setup.sh
+RUN ./setup.sh
 
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 
 # 作業ユーザー作成
 ARG UID=1000
