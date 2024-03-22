@@ -16,3 +16,12 @@ git clone https://github.com/Genymobile/scrcpy.git /scrcpy && \
     ./install_release.sh
 
 git clone https://github.com/yx-saku/adb-wifi-debug.git /adb-wifi-debug
+
+cat <<EOF > /usr/bin/mirroring.sh
+#!/bin/bash
+
+. /adb-wifi-debug/connect.sh
+scrcpy --tcpip=\${CONNECTED_ADDRESS} \$SCRCPY_ARGS
+EOF
+
+chmod +x /usr/bin/mirroring.sh
