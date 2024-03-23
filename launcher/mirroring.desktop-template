@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=mirroring
+Exec=gnome-terminal -- /bin/bash -c "xhost +local:docker; docker compose run --build mirror" &
+Terminal=false
+Type=Application
+Path=/home/selsxprob/android_mirror
+Categories=AudioVideo
