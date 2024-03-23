@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=mirroring
+Exec=docker compose run --build mirror
+Terminal=false
+Type=Application
+Path=/path/to/project/root
