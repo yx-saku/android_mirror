@@ -1,27 +1,34 @@
 version: '3.9'
 
+x-common: &common
+  build:
+    context: .
+    args:
+      - USER=$USER
+      - GROUP=$USER
+  environment:
+    - DISPLAY=$DISPLAY
+    - PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native
+    - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}
+    #- ADDRESS=
+    #- SCRCPY_ARGS=
+  env_file:
+    - .env
+  volumes:
+    - /tmp/.X11-unix:/tmp/.X11-unix
+    - /dev/snd:/dev/snd
+    - ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native
+    - ~/.config/pulse/cookie:/root/.config/pulse/cookie
+    - ./cache:/home/$USER/cache
+    - ./.android:/home/$USER/.android
+  tty: true
+  stdin_open: true
+  privileged: true
+
 services:
   mirror:
-    build:
-      context: .
-      args:
-        - USER=$USER
-        - GROUP=$USER
-    environment:
-      - DISPLAY=$DISPLAY
-      - PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native
-      - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}
-      #- ADDRESS=
-      #- SCRCPY_ARGS=
-    env_file:
-      - .env
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
-      - /dev/snd:/dev/snd
-      - ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native
-      - ~/.config/pulse/cookie:/root/.config/pulse/cookie
-      - ./cache:/home/$USER/cache
-      - ./.android:/home/$USER/.android
-    tty: true
-    stdin_open: true
-    privileged: true
+    <<: *common
+
+  test:
+    <<: *common
+    entrypoint: []
