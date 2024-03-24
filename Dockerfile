@@ -1,9 +1,15 @@
 FROM ubuntu:latest
 
+ENV TZ=Asia/Tokyo
+ENV LANG=ja_JP.UTF-8
+ENV LC_ALL=ja_JP.UTF-8
+
 RUN apt-get update
 
 COPY setup.sh ./setup.sh
 RUN ./setup.sh
+
+RUN apt-get install language-pack-ja fonts-takao zenity -y
 
 COPY entrypoint.sh /entrypoint.sh
 
