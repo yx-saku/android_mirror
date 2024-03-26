@@ -1,27 +1,20 @@
 #!/bin/bash -e
 
-apt-get install -y ffmpeg libsdl2-2.0-0 wget \
-    gcc git pkg-config meson ninja-build libsdl2-dev \
-    libavcodec-dev libavdevice-dev libavformat-dev libavutil-dev \
-    libswresample-dev libusb-1.0-0 libusb-1.0-0-dev \
-    sudo unzip alsa-utils
-
-# aptでadbをインストールするとapt pairコマンドがないため、直接adb最新版をインストール
-wget https://dl.google.com/android/repository/platform-tools-latest-linux.zip  && \
-    unzip platform-tools-latest-linux.zip -d /adb && \
-    ln -s /adb/platform-tools/adb /usr/local/bin/adb
-
-git clone https://github.com/Genymobile/scrcpy.git /scrcpy && \
-    cd /scrcpy && \
-    ./install_release.sh
+apt-get install -y wget git sudo unzip alsa-utils
 
 git clone https://github.com/yx-saku/adb-wifi-debug.git /adb-wifi-debug
+/adb-wifi-debug/setup.sh
 
-cat <<EOF > /usr/bin/mirroring.sh
-#!/bin/bash
+apt-get install -y ffmpeg libsdl2-2.0-0 \
+    gcc pkg-config meson ninja-build libsdl2-dev \
+    libavcodec-dev libavdevice-dev libavformat-dev libavutil-dev \
+    libswresample-dev libusb-1.0-0 libusb-1.0-0-dev
 
-. /adb-wifi-debug/connect.sh
-scrcpy --tcpip=\${CONNECTED_ADDRESS} \$SCRCPY_ARGS
-EOF
-
-chmod +x /usr/bin/mirroring.sh
+# scrcpy-serverのバージョンが合わないので修正してインストール
+# https://github.com/Genymobile/scrcpy/issues/3421
+git clone https://github.com/Genymobile/scrcpy
+cd scrcpy
+git checkout v2.4
+sed -E 's#/v.*/scrcpy-server-v.*#/v2.4/scrcpy-server-v2.4#' -i ./install_release.sh
+sed -E 's/^(.*sha256sum --check.*)$/#$1/' -i ./install_release.sh
+./install_release.sh

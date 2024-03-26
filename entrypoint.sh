@@ -15,7 +15,7 @@ export PAIR_CODE=$3
 while true;
 do
     scrcpy --tcpip=${CONNECTED_ADDRESS} $SCRCPY_ARGS
-
+    
     if ! zenity --question --text="再起動しますか？5秒経過で終了します。" --timeout=5; then
         break
     fi
