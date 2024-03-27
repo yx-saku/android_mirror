@@ -19,4 +19,4 @@ sed -E 's#/v.*/scrcpy-server-v.*#/v2.4/scrcpy-server-v2.4#' -i ./install_release
 sed -E 's/^(.*sha256sum --check.*)$/#$1/' -i ./install_release.sh
 ./install_release.sh
 
-cp -f /android_mirror/bin/mirroring.sh /usr/bin/mirroring.sh
+cp -f $(cd $(dirname $0); pwd)/bin/mirroring.sh /usr/bin/mirroring.sh
