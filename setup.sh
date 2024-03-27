@@ -18,3 +18,5 @@ git checkout v2.4
 sed -E 's#/v.*/scrcpy-server-v.*#/v2.4/scrcpy-server-v2.4#' -i ./install_release.sh
 sed -E 's/^(.*sha256sum --check.*)$/#$1/' -i ./install_release.sh
 ./install_release.sh
+
+cp -f ./bin/mirroring.sh /usr/bin/mirroring.sh
