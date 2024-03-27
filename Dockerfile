@@ -7,10 +7,9 @@ ENV LC_ALL=ja_JP.UTF-8
 RUN apt-get update && \
     apt-get install language-pack-ja fonts-takao zenity -y
 
-# TODO 問題なさそうならsetupにする
-COPY ./bin/mirroring.sh ./bin/mirroring.sh
-COPY setup.sh ./setup.sh
-RUN ./setup.sh
+COPY ./bin/mirroring.sh /android_mirror/bin/mirroring.sh
+COPY ./setup.sh /android_mirror/setup.sh
+RUN /android_mirror/setup.sh
 
 COPY entrypoint.sh /entrypoint.sh
 
